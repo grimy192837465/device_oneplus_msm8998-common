@@ -20,6 +20,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # ADB at boot
 persist.service.adb.enable=1
+persist.service.debuggable=1
+persist.sys.usb.config=mtp,adb
 ro.adb.secure=0
 ro.secure=0
 
@@ -280,3 +282,30 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Wi-Fi
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0
+
+# HAL1 Packages
+camera.hal1.packagelist=com.skype.raider,com.google.android.talk
+
+# VoLTE Prop
+persist.dbg.ims_volte_enable=1
+persist.dbg.volte_avail_ovr=1
+persist.dbg.vt_avail_ovr=1
+persist.dbg.wfc_avail_ovr=1
+persist.volte_enalbed_by_hw=1 
+persist.radio.VT_HYBRID_ENABLE=1
+
+# OldSchool
+wifi.supplicant_scan_interval=2400
+persist.service.lgospd.enable=0
+persist.service.pcsync.enable=0
+touch.pressure.scale=0.003
+ro.media.enc.jpeg.quality=100
+persist.cust.tel.eons=1
+ro.config.hw_fast_dormancy=1
+persist.debug.force_burn_in=true
+ro.gps.agps_provider=1
+
+# Fling
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.min.fling_velocity=160 \
+    ro.max.fling_velocity=20000
