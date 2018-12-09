@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.oneplus.shit.settings.DCIModeSwitch;
+import com.oneplus.shit.settings.DisplayCalibration;
 import com.oneplus.shit.settings.SRGBModeSwitch;
 import com.oneplus.shit.settings.VibratorStrengthPreference ;
 /*import com.oneplus.shit.settings.TapToWakeSwitch;*/
@@ -64,6 +65,7 @@ public class BootReceiver extends BroadcastReceiver {
 	restore(TapToWakeSwitch.getFile(), enabled);*/
 
         VibratorStrengthPreference.restore(context);
+	DisplayCalibration.restore(context);
     }
 }
 
