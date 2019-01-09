@@ -20,31 +20,7 @@ on boot
     write /dev/cpuset/foreground/cpus 0-7
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
-
-on charger
-    # Enable UFS powersaving
-    write /sys/devices/soc/1da4000.ufshc/clkscale_enable 1
-    write /sys/devices/soc/1da4000.ufshc/clkgate_enable 1
-    write /sys/devices/soc/1da4000.ufshc/hibern8_on_idle_enable 1
-
-    write /sys/module/lpm_levels/parameters/sleep_disabled N
-
-    # disable thermal core control
-    write /sys/module/msm_thermal/core_control/enabled 0
-
-    # online cpu 0 and set governor powersave
-    write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
-
-    # offline remaining cores
-    write /sys/devices/system/cpu/cpu1/online 0
-    write /sys/devices/system/cpu/cpu2/online 0
-    write /sys/devices/system/cpu/cpu3/online 0
-    write /sys/devices/system/cpu/cpu4/online 0
-    write /sys/devices/system/cpu/cpu5/online 0
-    write /sys/devices/system/cpu/cpu6/online 0
-    write /sys/devices/system/cpu/cpu7/online 0
-
+    
 on late-fs
     # Enable boot time fs tuning (ro like system is on sda, rw like userdata is on sde)
     write /sys/block/sda/queue/iostats 0
@@ -71,12 +47,15 @@ on property:vendor.post_boot.parsed=1
 
 on property:sys.boot_completed=1
     # Disable boot time fs tuning
-    write /sys/block/sde/queue/read_ahead_kb 1024
-    write /sys/block/sde/queue/nr_requests 128
-    write /sys/block/sde/queue/iostats 1
-    write /sys/block/sda/queue/read_ahead_kb 1024
+    write /sys/block/sda/queue/read_ahead_kb 1536
     write /sys/block/sda/queue/nr_requests 128
     write /sys/block/sda/queue/iostats 1
+    write /sys/block/sdf/queue/read_ahead_kb 1536
+    write /sys/block/sdf/queue/nr_requests 128
+    write /sys/block/sdf/queue/iostats 1
+    write /sys/block/sde/queue/read_ahead_kb 1536
+    write /sys/block/sde/queue/nr_requests 128
+    write /sys/block/sde/queue/iostats 1
 
     # Enable UFS powersaving
     write /sys/devices/soc/1da4000.ufshc/clkscale_enable 1
@@ -91,7 +70,7 @@ on property:sys.boot_completed=1
     # disable thermal core control until CPU is configured
     write /sys/module/msm_thermal/core_control/enabled 0
 
-    # bring back all cores
+    # online all cores
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu2/online 1
@@ -101,15 +80,17 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu6/online 1
     write /sys/devices/system/cpu/cpu7/online 1
 
-    # configure governor settings for little cluster
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "schedutil"
-    write /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us 500
-    write /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us 20000
-
-    # configure governor settings for big cluster
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "schedutil"
-    write /sys/devices/system/cpu/cpufreq/policy4/schedutil/up_rate_limit_us 500
-    write /sys/devices/system/cpu/cpufreq/policy4/schedutil/down_rate_limit_us 20000
+    #Set Governor and tuneables
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "schedutil"
+	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "schedutil"
+        write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
+        write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 300000
+        write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1900800
+        write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2457600
+	write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 500
+	write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/schedutil/up_rate_limit_us 500
+	write /sys/devices/system/cpu/cpu4/cpufreq/schedutil/down_rate_limit_us 20000
 
     # Core Control
     write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
@@ -145,6 +126,13 @@ on property:sys.boot_completed=1
     write /dev/cpuset/camera-daemon/cpus 0-3
     write /dev/cpuset/restricted/cpus 0-3
 
+    #Enable boost configuration 
+    write /sys/module/cpu_boost/parameters/dynamic_stune_boost 20
+    write /sys/module/cpu_boost/parameters/boost_ms 0
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0"
+    write /sys/module/msm_performance/parameters/touchboost 0
+    write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
+
     start vendor.qcom-power
 
     # Enable Adaptive LMK
@@ -152,5 +140,5 @@ on property:sys.boot_completed=1
     write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,51256,150296,200640"
     write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 162500
 
-    # Set BFQ I/O scheduler
-    setprop sys.io.scheduler "bfq"
+    # Set anxiety I/O scheduler
+    setprop sys.io.scheduler "anxiety"
