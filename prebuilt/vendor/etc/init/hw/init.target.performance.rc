@@ -107,13 +107,13 @@ on property:vendor.post_boot.parsed=1
 
 on property:sys.boot_completed=1
     # Disable boot time fs tuning
-    write /sys/block/sda/queue/read_ahead_kb 1024
+    write /sys/block/sda/queue/read_ahead_kb 1536
     write /sys/block/sda/queue/nr_requests 128
     write /sys/block/sda/queue/iostats 1
-    write /sys/block/sdf/queue/read_ahead_kb 1024
+    write /sys/block/sdf/queue/read_ahead_kb 1536
     write /sys/block/sdf/queue/nr_requests 128
     write /sys/block/sdf/queue/iostats 1
-    write /sys/block/sde/queue/read_ahead_kb 1024
+    write /sys/block/sde/queue/read_ahead_kb 1536
     write /sys/block/sde/queue/nr_requests 128
     write /sys/block/sde/queue/iostats 1
 
@@ -197,5 +197,5 @@ on property:sys.boot_completed=1
     write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,51256,150296,200640"
     write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 162500
 
-    # Set BFQ I/O scheduler
-    setprop sys.io.scheduler "bfq"
+    # Set anxiety I/O scheduler
+    setprop sys.io.scheduler "anxiety"
