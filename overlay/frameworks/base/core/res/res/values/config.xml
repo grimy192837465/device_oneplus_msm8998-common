@@ -684,16 +684,16 @@
 
 
     <!-- The list absolute paths of jar/apk files containing the device specific handlers,
-        delimited by File.pathSeparator, which defaults to ":" on Android -->
+        delimited by File.pathSeparator, which defaults to ":" on Android 
     <string-array name="config_deviceKeyHandlerLibs" translatable="false">
 		<item>/system/priv-app/OneplusShit/OneplusShit.apk</item>
-	</string-array>
+	</string-array> -->
 
     <!-- Full qualified name of the class that implements
-        com.android.internal.os.DeviceKeyHandler interface. -->
+        com.android.internal.os.DeviceKeyHandler interface. 
     <string-array name="config_deviceKeyHandlerClasses" translatable="false">
 		<item>com.oneplus.shit.settings.KeyHandler</item>
-	</string-array>
+	</string-array> -->
 
     <!-- If true, the display will be shifted around in ambient mode. -->
     <bool name="config_enableBurnInProtection">true</bool>
