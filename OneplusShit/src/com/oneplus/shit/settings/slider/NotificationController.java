@@ -43,7 +43,7 @@ public final class NotificationController extends SliderControllerBase {
                 Settings.Global.ZEN_MODE_NO_INTERRUPTIONS);
         MODES.put(NOTIFICATION_PRIORITY_ONLY,
                 Settings.Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
-        MODES.put(NOTIFICATION_NONE,
+        MODES.put(NOTIFICATION_ALL,
                 Settings.Global.ZEN_MODE_OFF);
     }
 
